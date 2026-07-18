@@ -1,0 +1,31 @@
+COST ANALYSIS REPORT
+
+Total AWS spend during project:
+→ $0.00 ✅
+
+Cost optimization decisions made:
+
+1. Used Free Tier services wherever possible
+   → t2.micro EC2 instances
+   → db.t3.micro RDS instance
+   → S3 standard storage
+
+2. Deleted resources after testing
+   → NAT Gateway deleted immediately
+   → Load Balancer deleted after testing
+   → Auto Scaling Group removed
+   → Elastic IP released
+
+3. Avoided costly features
+   → CloudFront health checks skipped
+   → Route53 health checks skipped
+   → Multi-AZ RDS not used in practice
+
+4. Used Sandbox template for RDS
+   → Avoided production pricing
+
+5. Disabled Storage Autoscaling
+   → Prevents unexpected storage charges
+
+Total project cost: $0.00
+AWS Free Tier utilized: 100% ✅
