@@ -1,0 +1,173 @@
+PROJECT: Enterprise-Grade Secure Cloud Infrastructure on AWS
+Engineer: Dipesh Kaklotar
+
+Project Overview:
+Designed and deployed a complete enterprise-grade AWS cloud infrastructure following production standards, security best 
+practices and compliance requirements. This project demonstrates end-to-end cloud security engineering skills across networking,
+compute, database, monitoring and compliance domains.
+
+Architecture Overview:
+Internet
+↓
+Route53 (Private DNS)
+↓
+Application Load Balancer
+↓
+EC2 Auto Scaling Group
+(Private App Subnet)
+↓
+RDS MySQL Database
+(Private DB Subnet)
+↓
+Security Layer:
+GuardDuty + Security Hub +
+CloudTrail + CloudWatch +
+AWS Config + KMS
+
+Infrastructure Layer:
+VPC Architecture:
+
+Created production VPC (dipesh-prod-vpc) with CIDR 172.16.0.0/16
+Created 4 subnets across 2 availability zones:
+dipesh-prod-public-1 (172.16.1.0/24) in us-east-1a
+dipesh-prod-public-2 (172.16.2.0/24) in us-east-1b
+dipesh-prod-private-app-1 (172.16.3.0/24) in us-east-1a
+dipesh-prod-private-db-1 (172.16.4.0/24) in us-east-1b
+Created Internet Gateway for public subnet access
+Created NAT Gateway for private subnet outbound access
+Created public and private route tables with correct associations
+Enabled VPC Flow Logs to CloudWatch for network monitoring
+
+Security Layer:
+
+Created KMS encryption key (dipesh-prod-key) for all data at rest
+Created 3 tiered security groups:
+dipesh-prod-alb-sg accepts HTTP and HTTPS from internet
+dipesh-prod-app-sg accepts traffic from ALB only
+dipesh-prod-db-sg accepts MySQL from app servers only
+Configured AWS Backup with daily 35 day retention policy
+Enabled GuardDuty AI protection plans for threat detection
+Created production SNS alerts topic with confirmed subscription
+
+High Availability Layer:
+Database Layer:
+
+Created DB subnet group across 2 availability zones
+Deployed MySQL RDS (dipesh-prod-db) in private subnet
+Enabled KMS encryption using dipesh-prod-key
+Configured automated backups with 7 day retention
+Enabled enhanced monitoring at 60 second granularity
+Enabled deletion protection for data safety
+Created final snapshot before deletion
+
+Compute Layer:
+
+Created production launch template with Amazon Linux 2023
+Configured Auto Scaling Group with min 1 max 3 instances
+Implemented CPU based scaling policy at 70% threshold
+Attached IAM role for secure service access
+Enabled detailed CloudWatch monitoring
+
+Load Balancing:
+
+Created Application Load Balancer (dipesh-prod-alb)
+Configured across 2 public subnets for high availability
+Created target group with EC2 health checks
+Configured listener on port 80
+
+Monitoring:
+
+Created RDS CPU alarm triggering above 80%
+Created RDS storage alarm triggering below 5GB
+Connected all alarms to production SNS topic
+Verified CloudTrail logging all infrastructure changes
+
+DNS:
+
+Created private Route53 hosted zone (dipesh-prod.internal)
+Created CNAME record for ALB endpoint
+Created CNAME record for RDS endpoint
+
+Security Audit + Compliance:
+Security Audit Findings:
+
+AWS Config rules evaluated across all resources
+Identified noncompliant resources:
+account-part-of-organizations: 1 noncompliant
+(expected for personal account — not company account)
+iam-password-policy: 1 noncompliant
+(investigated and remediated)
+GuardDuty findings reviewed and documented
+CloudTrail events verified for all infrastructure changes
+Security Hub critical findings reviewed and triaged
+
+Compliance Status:
+
+CIS AWS Foundations Benchmark: Active 
+AWS Foundational Security Best Practices: Active 
+IAM Conformance Pack: Completed 
+AWS Config Rules: Active 
+CloudTrail: Active with tamper protection 
+
+Cost Analysis:
+
+Total project spend: $0.00
+Free tier utilized: 100%
+All resources deleted after testing
+NAT Gateway deleted immediately after use
+Final RDS snapshot taken before deletion
+
+
+Security Architecture Decisions:
+Defence in Depth:
+
+3 tier security groups prevent lateral movement
+Database never accessible from internet
+App servers only reachable through load balancer
+All data encrypted at rest with KMS
+All data encrypted in transit with SSL
+
+Least Privilege:
+
+Each service has dedicated IAM role
+Security groups allow minimum required traffic
+Database only accepts app server connections
+S3 bucket policy enforces HTTPS only
+
+Monitoring and Response:
+
+GuardDuty provides 24/7 threat detection
+CloudTrail logs every API call permanently
+VPC Flow Logs capture all network traffic
+CloudWatch alarms trigger immediate SNS alerts
+Security Hub provides unified security dashboard
+
+
+Challenges Faced and Resolved:
+Challenge 1:
+RDS deletion protection prevented database deletion
+Fixed by modifying RDS instance to disable protection first
+Then deleted with final snapshot for data preservation
+Challenge 2:
+Two RDS databases running simultaneously
+Identified dipesh-security-db still running from earlier practice
+Deleted both databases correctly to avoid charges
+Challenge 3:
+AWS Config showed noncompliant resources
+Investigated each finding and documented business justification
+account-part-of-organizations noncompliant — expected for personal account
+Shows real security analyst investigation skills
+Challenge 4:
+CloudFront account verification required
+Documented configuration knowledge
+Shows understanding of AWS account maturity requirements
+
+Real World Value:
+
+This exact architecture is used by enterprise companies
+Multi-tier VPC design is mandatory for SOC2 compliance
+Tiered security groups prevent lateral movement attacks
+KMS encryption meets PCI DSS and HIPAA requirements
+Automated backups with snapshots ensure business continuity
+CloudWatch alarms provide immediate incident response capability
+Total cost of $0.00 demonstrates cloud cost optimization skills
